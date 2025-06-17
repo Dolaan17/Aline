@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>???? ? ???????????</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-tabs">
+            <button id="loginTab" class="active" onclick="showForm('login')">????</button>
+            <button id="registerTab" onclick="showForm('register')">???????????</button>
+        </div>
+        <form id="loginForm" class="auth-form active" autocomplete="off">
+            <h2>????</h2>
+            <input type="email" placeholder="E-mail" required id="loginEmail">
+            <div class="password-field">
+                <input type="password" placeholder="??????" required id="loginPassword">
+                <span class="toggle-password" onclick="togglePassword('loginPassword', this)">
+                    <i class="fa-regular fa-eye"></i>
+                </span>
+            </div>
+            <button type="submit">?????</button>
+            <div class="auth-links">
+                <a href="#">?????? ???????</a>
+            </div>
+        </form>
+        <form id="registerForm" class="auth-form" autocomplete="off">
+            <h2>???????????</h2>
+            <input type="text" placeholder="?????" required id="registerName">
+            <input type="email" placeholder="E-mail" required id="registerEmail">
+            <div class="password-field">
+                <input type="password" placeholder="??????? ??????" required id="registerPassword">
+                <span class="toggle-password" onclick="togglePassword('registerPassword', this)">
+                    <i class="fa-regular fa-eye"></i>
+                </span>
+            </div>
+            <div class="password-field">
+                <input type="password" placeholder="??????? ??????" required id="registerPasswordRepeat">
+                <span class="toggle-password" onclick="togglePassword('registerPasswordRepeat', this)">
+                    <i class="fa-regular fa-eye"></i>
+                </span>
+            </div>
+            <button type="submit">??????????????????</button>
+        </form>
+    </div>
+    <script>
+        function showForm(form) {
+            console.log('showForm called with:', form);
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('registerTab').classList.remove('active');
+            if (form === 'login') {
+                document.getElementById('loginForm').classList.add('active');
+                document.getElementById('loginTab').classList.add('active');
+            } else {
+                document.getElementById('registerForm').classList.add('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
+        }
+
+        function togglePassword(inputId, iconSpan) {
+            const input = document.getElementById(inputId);
+            const icon = iconSpan.querySelector('i');
+            if (!icon) {
+                console.error('Font Awesome icon not found');
+                return;
+            }
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        document.getElementById('registerForm').onsubmit = async function (e) {
+            console.log('Register form submitted');
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordRepeat = document.getElementById('registerPasswordRepeat').value;
+            if (password !== passwordRepeat) {
+                alert('?????? ?? ?????????!');
+                return;
+            }
+            try {
+                const res = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                if (res.ok) {
+                    window.location.href = '/index.html'; // ???????? ? /auth.html ?? /index.html
+                } else {
+                    const data = await res.json();
+                    alert(data.error || '?????? ???????????');
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                alert('?????? ??? ???????? ???????: ' + err.message);
+            }
+        };
+
+        document.getElementById('loginForm').onsubmit = async function (e) {
+            console.log('Login form submitted');
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            try {
+                const res = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                if (res.ok) {
+                    window.location.href = '/index.html';
+                } else {
+                    const data = await res.json();
+                    alert(data.error || '???????? ????? ??? ??????');
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                alert('?????? ??? ???????? ???????: ' + err.message);
+            }
+        };
+    </script>
+</body>
+</html>
