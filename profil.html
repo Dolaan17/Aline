@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>???? ? ???????????</title>
+    <title>Вход и регистрация</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="auth.css">
@@ -12,40 +12,40 @@
 <body>
     <div class="auth-container">
         <div class="auth-tabs">
-            <button id="loginTab" class="active" onclick="showForm('login')">????</button>
-            <button id="registerTab" onclick="showForm('register')">???????????</button>
+            <button id="loginTab" class="active" onclick="showForm('login')">Вход</button>
+            <button id="registerTab" onclick="showForm('register')">Регистрация</button>
         </div>
         <form id="loginForm" class="auth-form active" autocomplete="off">
-            <h2>????</h2>
+            <h2>Вход</h2>
             <input type="email" placeholder="E-mail" required id="loginEmail">
             <div class="password-field">
-                <input type="password" placeholder="??????" required id="loginPassword">
+                <input type="password" placeholder="Пароль" required id="loginPassword">
                 <span class="toggle-password" onclick="togglePassword('loginPassword', this)">
                     <i class="fa-regular fa-eye"></i>
                 </span>
             </div>
-            <button type="submit">?????</button>
+            <button type="submit">Войти</button>
             <div class="auth-links">
-                <a href="#">?????? ???????</a>
+                <a href="#">Забыли пароль?</a>
             </div>
         </form>
         <form id="registerForm" class="auth-form" autocomplete="off">
-            <h2>???????????</h2>
-            <input type="text" placeholder="?????" required id="registerName">
+            <h2>Регистрация</h2>
+            <input type="text" placeholder="Логин" required id="registerName">
             <input type="email" placeholder="E-mail" required id="registerEmail">
             <div class="password-field">
-                <input type="password" placeholder="??????? ??????" required id="registerPassword">
+                <input type="password" placeholder="Введите пароль" required id="registerPassword">
                 <span class="toggle-password" onclick="togglePassword('registerPassword', this)">
                     <i class="fa-regular fa-eye"></i>
                 </span>
             </div>
             <div class="password-field">
-                <input type="password" placeholder="??????? ??????" required id="registerPasswordRepeat">
+                <input type="password" placeholder="Введите пароль" required id="registerPasswordRepeat">
                 <span class="toggle-password" onclick="togglePassword('registerPasswordRepeat', this)">
                     <i class="fa-regular fa-eye"></i>
                 </span>
             </div>
-            <button type="submit">??????????????????</button>
+            <button type="submit">Зарегистрироваться</button>
         </form>
     </div>
     <script>
@@ -90,7 +90,7 @@
             const password = document.getElementById('registerPassword').value;
             const passwordRepeat = document.getElementById('registerPasswordRepeat').value;
             if (password !== passwordRepeat) {
-                alert('?????? ?? ?????????!');
+                alert('Пароли не совпадают!');
                 return;
             }
             try {
@@ -100,14 +100,14 @@
                     body: JSON.stringify({ name, email, password })
                 });
                 if (res.ok) {
-                    window.location.href = '/index.html'; // ???????? ? /auth.html ?? /index.html
+                    window.location.href = '/index.html'; // Изменено с /auth.html на /index.html
                 } else {
                     const data = await res.json();
-                    alert(data.error || '?????? ???????????');
+                    alert(data.error || 'Ошибка регистрации');
                 }
             } catch (err) {
                 console.error('Fetch error:', err);
-                alert('?????? ??? ???????? ???????: ' + err.message);
+                alert('Ошибка при отправке запроса: ' + err.message);
             }
         };
 
@@ -126,11 +126,11 @@
                     window.location.href = '/index.html';
                 } else {
                     const data = await res.json();
-                    alert(data.error || '???????? ????? ??? ??????');
+                    alert(data.error || 'Неверный логин или пароль');
                 }
             } catch (err) {
                 console.error('Fetch error:', err);
-                alert('?????? ??? ???????? ???????: ' + err.message);
+                alert('Ошибка при отправке запроса: ' + err.message);
             }
         };
     </script>
